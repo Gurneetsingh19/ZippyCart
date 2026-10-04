@@ -11,7 +11,7 @@ from uuid import uuid4
 from staff import staff_bp
 from company_auth import store_app 
 
-# Us blueprint ko main app ke sath register (jod) do
+
 
 
 app = Flask(__name__)
@@ -311,7 +311,7 @@ def checkout_session(session_id):
     except:
         return jsonify({"success": False, "message": "Invalid token"}), 401
 
-    # 2. Database se ACTIVE session dhoondhna
+    
     session = sessions_collection.find_one({
         "session_id": session_id,
         "user_id": user_id,
@@ -321,12 +321,12 @@ def checkout_session(session_id):
     if not session:
         return jsonify({"success": False, "message": "Active session not found. Maybe already checked out?"}), 404
 
-    # 3. Check karna ki cart khali toh nahi hai?
+    
     items = session.get("items", [])
     if len(items) == 0:
         return jsonify({"success": False, "message": "Cart is empty. Add items before checkout."}), 400
 
-    # 4. Cart ka status update karna (ACTIVE -> CHECKOUT_PENDING)
+    # Cart Status update (ACTIVE -> CHECKOUT_PENDING)
     sessions_collection.update_one(
         {"session_id": session_id},
         {"$set": {
@@ -334,11 +334,10 @@ def checkout_session(session_id):
         }}
     )
 
-    # 5. Frontend ko QR generate karne ke liye data bhejna
+    # Send data to frontend for QR Code generation and payment
     return jsonify({
         "success": True,
         "message": "Checkout successful. Ready for payment.",
-        # React is 'qr_data' ko use karke QR Code draw karega
         "qr_data": session_id,  
         "total_amount": session.get("total", 0)
     }), 200
