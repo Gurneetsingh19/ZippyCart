@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans antialiased selection:bg-primary-100 selection:text-primary-900;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+  }
+}
+
+@layer components {
+  /* Clean glassmorphism cards */
+  .glass-card {
+    @apply bg-white/90 backdrop-blur-md border border-white/20 shadow-sm rounded-2xl;
+  }
+  
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-xl font-medium transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-600 text-white hover:bg-primary-700 shadow-md hover:shadow-lg shadow-primary-500/30;
+  }
+  
+  .btn-secondary {
+    @apply bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:border-gray-300 shadow-sm;
+  }
+  
+  .btn-ghost {
+    @apply bg-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-900;
+  }
+  
+  /* Focus rings */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:ring-offset-2;
+  }
+}

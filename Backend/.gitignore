@@ -1,0 +1,12 @@
+# Secret Variables & Passwords
+.env
+
+# Python Cache Files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Postman Testing Folders
+.postman/
+postman/
