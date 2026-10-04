@@ -15,7 +15,11 @@ from company_auth import store_app
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=[
+    "https://zippycart-rho.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000"
+])
 
 app.register_blueprint(staff_bp)
 app.register_blueprint(store_app) 

@@ -34,7 +34,7 @@ export const StaffPayment = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/staff/${session.session_id || session.id}/payment_completed`, {
+      const response = await fetch(`https://zippycart-backend.onrender.com/api/staff/${session.session_id || session.id}/payment_completed`, {
         method: 'POST'
       });
       const data = await response.json();

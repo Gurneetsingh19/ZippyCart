@@ -45,7 +45,7 @@ export const Welcome = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/register_store', {
+      const response = await fetch('https://zippycart-backend.onrender.com/api/register_store', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -24,7 +24,7 @@ export const StaffDashboard = () => {
 
     setIsCreating(true);
     try {
-      const response = await fetch('http://localhost:5000/api/staff/signup', {
+      const response = await fetch('https://zippycart-backend.onrender.com/api/staff/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

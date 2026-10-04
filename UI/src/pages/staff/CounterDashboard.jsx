@@ -40,7 +40,7 @@ export const CounterDashboard = () => {
     setIsLoading(true);
     setScanError(false);
     try {
-      const response = await fetch(`http://localhost:5000/api/staff/${manualId}/Bill`);
+      const response = await fetch(`https://zippycart-backend.onrender.com/api/staff/${manualId}/Bill`);
       const data = await response.json();
       
       if (response.ok && data.success) {

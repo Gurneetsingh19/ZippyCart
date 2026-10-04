@@ -20,7 +20,7 @@ export const CartProvider = ({ children }) => {
   const startSession = async () => {
     try {
       const token = localStorage.getItem('customerToken');
-      const response = await fetch('http://localhost:5000/api/session', {
+      const response = await fetch('https://zippycart-backend.onrender.com/api/session', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -84,7 +84,7 @@ export const CartProvider = ({ children }) => {
   const processCheckout = async () => {
     try {
       const token = localStorage.getItem('customerToken');
-      const response = await fetch(`http://localhost:5000/api/${sessionId}/checkout`, {
+      const response = await fetch(`https://zippycart-backend.onrender.com/api/${sessionId}/checkout`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
