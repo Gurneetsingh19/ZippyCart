@@ -154,7 +154,7 @@ export const Scanner = () => {
         <Header 
           title="Scan Barcode" 
           showBack={true} 
-          className="bg-transparent border-none text-white backdrop-blur-none" 
+          className="bg-transparent border-none text-white backdrop-blur-none pointer-events-auto" 
           rightElement={
             <button 
               onClick={() => setIsFlashlightOn(!isFlashlightOn)}

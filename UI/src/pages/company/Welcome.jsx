@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
-import { ShoppingCart, Building2, Mail, Phone, MapPin, Lock, ArrowRight, Zap, ShieldCheck, BarChart3, X, CheckCircle2, Download, PackagePlus, UserPlus, Scan } from 'lucide-react';
+import { ShoppingCart, Building2, Mail, Phone, MapPin, Lock, ArrowRight, Zap, ShieldCheck, BarChart3, X, CheckCircle2, Download, PackagePlus, UserPlus, Scan, Menu } from 'lucide-react';
 import QRCode from 'react-qr-code';
 
 export const Welcome = () => {
   const navigate = useNavigate();
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [registeredData, setRegisteredData] = useState(null);
@@ -123,7 +124,36 @@ export const Welcome = () => {
               Register Company
             </button>
           </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center">
+            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-white p-2">
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-slate-900 border-b border-white/10 px-6 py-4 flex flex-col gap-4 text-sm font-medium text-slate-300 overflow-hidden"
+            >
+              <a href="#features" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-white transition-colors">Features</a>
+              <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-white transition-colors">Who We Are</a>
+              <button onClick={() => { setIsLoginModalOpen(true); setIsMobileMenuOpen(false); }} className="text-left hover:text-white transition-colors">Login</button>
+              <button
+                onClick={() => { setIsRegisterModalOpen(true); setIsMobileMenuOpen(false); }}
+                className="px-5 py-2.5 bg-white text-slate-900 rounded-lg hover:bg-slate-100 transition-colors font-bold w-full text-center"
+              >
+                Register Company
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Hero Section */}
