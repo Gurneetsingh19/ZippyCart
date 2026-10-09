@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Flashlight, X, Keyboard, ScanLine } from 'lucide-react';
 import { Header } from '../../components/Header';
 import { BottomSheet } from '../../components/BottomSheet';
-import { Html5QrcodeScanner } from 'html5-qrcode';
+import { Html5Qrcode } from 'html5-qrcode';
 import { useCart } from '../../context/CartContext';
 import { useToast } from '../../context/ToastContext';
 import { formatCurrency } from '../../utils/currency';
@@ -13,7 +13,13 @@ export const Scanner = () => {
   const { isLocked, sessionId, storeId, setItems } = useCart();
   const { showToast } = useToast();
   
+  const html5QrCodeRef = useRef(null);
+  const isFlashlightOnRef = useRef(false);
   const [isFlashlightOn, setIsFlashlightOn] = useState(false);
+
+  useEffect(() => {
+    isFlashlightOnRef.current = isFlashlightOn;
+  }, [isFlashlightOn]);
   const [showManualEntry, setShowManualEntry] = useState(false);
   const [manualBarcode, setManualBarcode] = useState('');
   const [isScanning, setIsScanning] = useState(true);
@@ -30,24 +36,48 @@ export const Scanner = () => {
 
     if (!isScanning) return;
 
-    const scanner = new Html5QrcodeScanner(
-      "reader",
-      { fps: 10, qrbox: { width: 250, height: 150 } },
-      false
-    );
+    const html5QrCode = new Html5Qrcode("reader");
+    html5QrCodeRef.current = html5QrCode;
 
-    scanner.render(
+    html5QrCode.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: { width: 250, height: 150 } },
       (decodedText) => {
-        scanner.clear();
         handleProductScanned(decodedText);
       },
       (error) => {}
-    );
+    ).then(() => {
+      if (isFlashlightOnRef.current) {
+        html5QrCode.applyVideoConstraints({
+          advanced: [{ torch: true }]
+        }).catch(e => console.warn("Torch failed", e));
+      }
+    }).catch(err => {
+      console.log("Failed to start scanner", err);
+    });
 
     return () => {
-      scanner.clear().catch(e => console.log("Failed to clear scanner", e));
+      if (html5QrCode.isScanning || (html5QrCode.getState && html5QrCode.getState() === 2)) {
+        html5QrCode.stop().then(() => {
+          html5QrCode.clear();
+        }).catch(e => console.log("Failed to stop scanner", e));
+      } else {
+        try { html5QrCode.clear(); } catch(e) {}
+      }
+      html5QrCodeRef.current = null;
     };
   }, [isScanning, isLocked, navigate, showToast]);
+
+  useEffect(() => {
+    const scanner = html5QrCodeRef.current;
+    if (scanner && (scanner.isScanning || (scanner.getState && scanner.getState() === 2))) {
+      scanner.applyVideoConstraints({
+        advanced: [{ torch: isFlashlightOn }]
+      }).catch(err => {
+        console.warn("Torch not supported or failed to toggle", err);
+      });
+    }
+  }, [isFlashlightOn]);
 
   const handleProductScanned = async (barcode) => {
     setIsScanning(false);
